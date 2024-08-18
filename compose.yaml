@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    command: ["postgres", "-c", "log_statement=all"]
+  # app:
+  #   environment:
+  #     PG_DSN: postgresql://app:app@localhost:5432/app?sslmode=disable

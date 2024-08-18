@@ -1,0 +1,60 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - dogsled
+    - durationcheck
+    - errname
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - gci
+    - gocritic
+    - gofumpt
+    - goimports
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - noctx
+    - prealloc
+    - revive
+    - staticcheck
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+    - wrapcheck
+
+linters-settings:
+  forbidigo:
+    forbid:
+      - ^(fmt\\.Print(|f|ln)|print|println)$
+      - (^|^U|[^U]U|[^U]|U[^U])ID
+  gci:
+    sections:
+      - standard
+      - default
+      - localmodule
+  revive:
+    rules:
+      - name: var-naming
+        disabled: true
+  unused:
+    local-variables-are-used: false
+  wrapcheck:
+    ignoreSigs:
+      - fmt.Errorf(
+      - errors.New(
+      - google.golang.org/grpc/status.Error(
+      - google.golang.org/grpc/status.Errorf(
+
+issues:
+  exclude-use-default: false
+  max-same-issues: 0

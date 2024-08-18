@@ -1,0 +1,151 @@
+syntax="proto3";
+
+package proxy;
+
+option go_package="proxy";
+
+enum Schema {
+    SCHEMA_UNSPECIFIED = 0;
+    SCHEMA_HTTP = 1;
+    SCHEMA_HTTPS = 2;
+    SCHEMA_SOCKS5 = 3;
+}
+
+service ProxyService {
+    rpc CreateProxy(CreateProxyRequest) returns (CreateProxyResponse) {}
+    rpc GetProxy(GetProxyRequest) returns (GetProxyResponse) {}
+    rpc UpdateProxy(UpdateProxyRequest) returns (UpdateProxyResponse) {}
+    rpc DeleteProxy(DeleteProxyRequest) returns (DeleteProxyResponse) {}
+
+    rpc CreateProxyBlock(CreateProxyBlockRequest) returns (CreateProxyBlockResponse) {}
+    rpc GetProxyBlock(GetProxyBlockRequest) returns (GetProxyBlockResponse) {}
+    rpc UpdateProxyBlock(UpdateProxyBlockRequest) returns (UpdateProxyBlockResponse) {}
+    rpc DeleteProxyBlock(DeleteProxyBlockRequest) returns (DeleteProxyBlockResponse) {}
+
+    rpc GetProxiesByProxyBlockId(GetProxiesByProxyBlockIdRequest) returns (GetProxiesByProxyBlockIdResponse) {}
+}
+
+message GetProxiesByProxyBlockIdRequest {
+    string id = 1;
+}
+
+message GetProxiesByProxyBlockIdResponse {
+    message Proxy {
+        string id = 1;
+        string name = 2;
+        string description = 3;
+        Schema schema = 4;
+        string host = 5;
+        uint32 port = 6;
+        optional string username = 7;
+        optional string password = 8;
+    }
+    repeated Proxy proxies = 1;
+}
+
+// Proxy Requests
+
+message CreateProxyRequest {
+    string name = 1;
+    string description = 2;
+    repeated string tags = 3;
+    Schema schema = 4;
+    string host = 5;
+    uint32 port = 6;
+    optional string username = 7;
+    optional string password = 8;
+}
+
+message GetProxyRequest {
+    string id = 1;
+}
+
+message UpdateProxyRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    repeated string tags = 4;
+    Schema schema = 5;
+    string host = 6;
+    uint32 port = 7;
+    string username = 8;
+    string password = 9;
+    repeated string field_mask = 10;
+}
+
+message DeleteProxyRequest {
+    string id = 1;
+}
+
+// Proxy Responses
+
+message CreateProxyResponse {
+    string id = 1;
+}
+
+message GetProxyResponse {
+    message Tag {
+        string id = 1;
+        string name = 2;
+        optional string color = 3;
+    }
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    repeated Tag tags = 4;
+    Schema schema = 5;
+    string host = 6;
+    uint32 port = 7;
+    optional string username = 8;
+    optional string password = 9;
+}
+
+message UpdateProxyResponse {}
+
+message DeleteProxyResponse {}
+
+// ProxyBlock Requests
+
+message CreateProxyBlockRequest {
+    string name = 1;
+    string description = 2;
+    repeated string tags = 3;
+}
+
+message GetProxyBlockRequest {
+    string id = 1;
+}
+
+message UpdateProxyBlockRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    repeated string tags = 4;
+    repeated string field_mask = 5;
+}
+
+message DeleteProxyBlockRequest {
+    string id = 1;
+}
+
+// ProxyBlock Responses
+
+message CreateProxyBlockResponse {
+    string id = 1;
+}
+
+message GetProxyBlockResponse {
+    message Tag {
+        string id = 1;
+        string name = 2;
+        optional string color = 3;
+    }
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    repeated Tag tags = 4;
+}
+
+message UpdateProxyBlockResponse {}
+
+message DeleteProxyBlockResponse {}

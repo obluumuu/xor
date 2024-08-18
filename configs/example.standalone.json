@@ -1,0 +1,17 @@
+{
+    "proxies": [
+        {
+            "name": "proxy1",
+            "schema": "http",
+            "host": "localhost",
+            "port": 1234,
+            "tags": ["local"]
+        }
+    ],
+    "proxy_blocks": [
+        {
+            "name": "test_proxy_block",
+            "tags": ["local"]
+        }
+    ]
+}

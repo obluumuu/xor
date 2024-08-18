@@ -1,0 +1,36 @@
+version: "2"
+sql:
+- schema: "migrations/"
+  queries: "queries/"
+  engine: "postgresql"
+  gen:
+    go:
+      package: "sqlc"
+      out: "gen/sqlc"
+      sql_package: "pgx/v5"
+      rename:
+        id: "Id"
+        proxy_id: "ProxyId"
+        tag_id: "TagId"
+        proxy_block_id: "ProxyBlockId"
+      overrides:
+        - db_type: "uuid"
+          go_type:
+            import: "github.com/google/uuid"
+            type: "UUID"
+        - db_type: "uuid"
+          nullable: true
+          go_type:
+            import: "github.com/google/uuid"
+            type: "UUID"
+            pointer: true
+        - db_type: "text"
+          nullable: true
+          go_type:
+            import: "github.com/guregu/null/v5"
+            type: "String"
+        - db_type: "pg_catalog.int4"
+          nullable: true
+          go_type:
+            import: "github.com/guregu/null/v5"
+            type: "Int32"
