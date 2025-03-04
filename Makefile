@@ -26,7 +26,11 @@ migrate-down:
 
 .PHONY: gen-proto
 gen-proto:
-	buf generate
+	protoc \
+		--proto_path=proto \
+		--go_out=gen/proto \
+		--go_opt=Mproxy/proxy.proto=proxy/ \
+		proto/**/**.proto
 
 .PHONY: gen-sql
 gen-sql:
@@ -59,4 +63,4 @@ install-tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 	go install github.com/daixiang0/gci@v0.13.4
 	go install github.com/pressly/goose/v3/cmd/goose@v3.21.1
-
+	go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.19.1

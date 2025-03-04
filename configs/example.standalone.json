@@ -1,17 +1,23 @@
 {
-    "proxies": [
-        {
-            "name": "proxy1",
-            "schema": "http",
-            "host": "localhost",
-            "port": 1234,
-            "tags": ["local"]
-        }
-    ],
-    "proxy_blocks": [
-        {
-            "name": "test_proxy_block",
-            "tags": ["local"]
-        }
-    ]
+	"proxies": [
+		{
+			"id": "6d93f620-1ef8-4bc9-8cc8-5e2f2e272027",
+			"name": "razan",
+			"schema": "socks5",
+			"host": "192.168.0.100",
+			"port": 8080,
+			"tags": [
+				"razan"
+			]
+		}
+	],
+	"proxy_blocks": [
+		{
+			"id": "032e1ea1-54ad-489c-ac50-566712ffeb2e",
+			"name": "test_proxy_block",
+			"tags": [
+				"razan"
+			]
+		}
+	]
 }

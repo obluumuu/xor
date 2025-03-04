@@ -4,25 +4,28 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/spf13/viper"
+	"github.com/knadh/koanf/parsers/json"
+	"github.com/knadh/koanf/providers/file"
+	"github.com/knadh/koanf/v2"
 
 	"github.com/obluumuu/xor/internal/models"
 )
 
 type Proxy struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Schema      string   `json:"schema"`
-	Host        string   `json:"host"`
-	Port        uint16   `json:"port"`
-	Username    *string  `json:"username"`
-	Password    *string  `json:"password"`
-	Tags        []string `json:"tags"`
+	Id          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Schema      string    `json:"schema"`
+	Host        string    `json:"host"`
+	Port        uint16    `json:"port"`
+	Username    *string   `json:"username"`
+	Password    *string   `json:"password"`
+	Tags        []string  `json:"tags"`
 }
 
 func (p *Proxy) ToModel() *models.Proxy {
-	proxy := &models.Proxy{
-		Id:          uuid.New(),
+	return &models.Proxy{
+		Id:          p.Id,
 		Name:        p.Name,
 		Description: p.Description,
 		Schema:      p.Schema,
@@ -30,44 +33,40 @@ func (p *Proxy) ToModel() *models.Proxy {
 		Port:        int32(p.Port),
 		Username:    p.Username,
 		Password:    p.Password,
+		Tags:        models.NewTagsFromNamesList(p.Tags),
 	}
-	proxy.Tags = models.NewTagsFromNamesList(p.Tags)
-
-	return proxy
 }
 
 type ProxyBlock struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Tags        []string `json:"tags"`
+	Id          uuid.UUID `koanf:"id"`
+	Name        string    `koanf:"name"`
+	Description string    `koanf:"description"`
+	Tags        []string  `koanf:"tags"`
 }
 
 func (p *ProxyBlock) ToModel() *models.ProxyBlock {
-	proxyBlock := &models.ProxyBlock{
-		Id:          uuid.New(),
+	return &models.ProxyBlock{
+		Id:          p.Id,
 		Name:        p.Name,
 		Description: p.Description,
+		Tags:        models.NewTagsFromNamesList(p.Tags),
 	}
-	proxyBlock.Tags = models.NewTagsFromNamesList(p.Tags)
-
-	return proxyBlock
 }
 
 type Config struct {
-	Proxies     []Proxy      `json:"proxies"`
-	ProxyBlocks []ProxyBlock `json:"proxy_blocks"`
+	Proxies     []Proxy      `koanf:"proxies"`
+	ProxyBlocks []ProxyBlock `koanf:"proxy_blocks"`
 }
 
 func ReadAndParseJsonFile(filename string) (*Config, error) {
-	viper.SetConfigFile(filename)
-	viper.SetConfigType("json")
+	k := koanf.New(".")
 
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, fmt.Errorf("read config: %w", err)
+	if err := k.Load(file.Provider(filename), json.Parser()); err != nil {
+		return nil, fmt.Errorf("load config: %w", err)
 	}
 
 	var cfg Config
-	if err := viper.Unmarshal(&cfg); err != nil {
+	if err := k.Unmarshal("", &cfg); err != nil {
 		return nil, fmt.Errorf("unmarshal config: %w", err)
 	}
 
